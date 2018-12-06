@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.bmc.dao.ShopMapper">
+    <resultMap id="shop" type="cn.bmc.entity.Shop">
+        <result property="id" column="id"/>
+        <result property="shopName" column="shop_name"/>
+        <result property="shopUrl" column="shop_url"/>
+        <result property="shopTable" column="shop_table"/>
+    </resultMap>
+    <select id="getShopList" resultMap="shop">
+        select * from bmc_shops
+    </select>
+</mapper>

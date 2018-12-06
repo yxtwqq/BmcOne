@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+
+<script src="js/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+    /*
+     * 加载下拉列表项
+     */
+    function onload() {
+        $.ajax({
+            type: "get",
+            url: "http://192.168.3.183:8081/bmc/shops",
+            dataType: "json",
+            data:{},
+            success: function(result) { //请求响应成功执行的函数
+                var dataObj = result;
+                var con = "";
+                con+="<option value='0'>请选择店铺：</option>";
+                $.each(dataObj, function(index,item) {
+                    con+="<option value="+item.id+">"+item.shopName+"</option>";
+                });
+                $("#goods_type").html(con);
+            },
+            error: function(err) {
+                alert("提交失败");
+            }
+        });
+    }
+
+    function tijiao() {
+        var shop = document.getElementById('goods_type').value;
+        if(shop == 0) {
+            alert("请选择店铺！");
+        } else {
+            var str = document.getElementById('file').value;
+            var suffix = str.substring(str.lastIndexOf("."), str.length);
+            suffix = suffix.toLowerCase();
+
+            if(suffix != ".xls") {
+                if(suffix != ".xlsx") {
+                    alert(suffix);
+                    alert("对不起，导入数据格式必须是xls或者xlsx格式文件哦，请您调整格式后重新上传，谢谢 ！");
+                } else {
+                    var setData = {
+                        "id": document.getElementById('goods_type').value,
+                        "filename": document.getElementById('file').value,
+                    };
+                    alert(setData.id + ":" + setData.filename);
+                }
+            }
+            $.ajax({
+                type: "post",
+                url: "http://localhost:8081/bmc/index",
+                data: {
+                    "id": setData.id,
+                    "fileName": setData.filename
+                },
+                dataType: "json",
+                success: function(data) { //请求响应成功执行的函数
+                    window.location.href = "https://www.baidu.com";
+                },
+                error: function(err) {
+                    alert("提交失败");
+                }
+            });
+        }
+    }
+</script>
+
+<body onload="onload()">
+<select id="goods_type">
+
+</select>
+<input type="file" id="file"><br>
+<input id="btn" type="button" onclick="tijiao()" value="提交">
+</body>
+
+</html>
