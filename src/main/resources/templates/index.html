@@ -14,15 +14,15 @@
     function onload() {
         $.ajax({
             type: "get",
-            url: "http://192.168.3.183:8081/bmc/shops",
+            url: "http://192.168.3.183:8080/bmc/shops",
             dataType: "json",
-            data:{},
+            data: {},
             success: function(result) { //请求响应成功执行的函数
                 var dataObj = result;
                 var con = "";
-                con+="<option value='0'>请选择店铺：</option>";
-                $.each(dataObj, function(index,item) {
-                    con+="<option value="+item.id+">"+item.shopName+"</option>";
+                con += "<option value='0'>请选择店铺：</option>";
+                $.each(dataObj, function(index, item) {
+                    con += "<option value=" + item.id + ">" + item.shopName + "</option>";
                 });
                 $("#goods_type").html(con);
             },
@@ -32,7 +32,7 @@
         });
     }
 
-    function tijiao() {
+    function upload() {
         var shop = document.getElementById('goods_type').value;
         if(shop == 0) {
             alert("请选择店铺！");
@@ -46,28 +46,29 @@
                     alert(suffix);
                     alert("对不起，导入数据格式必须是xls或者xlsx格式文件哦，请您调整格式后重新上传，谢谢 ！");
                 } else {
-                    var setData = {
-                        "id": document.getElementById('goods_type').value,
-                        "filename": document.getElementById('file').value,
-                    };
-                    alert(setData.id + ":" + setData.filename);
+                    var id = document.getElementById('goods_type').value;
+                    alert(id);
+
+                    var formData = new FormData();//指定数据对象
+                    formData.append("file", $('#file')[0].files[0]);
+                    formData.append("id", id);
+                    $.ajax({
+                        type: 'post',
+                        url: "http://localhost:8080/bmc/index",
+                        data: formData,//提交数据对象
+                        cache: false,
+                        processData: false,
+                        contentType: false,
+                        success: function(data) { //请求响应成功执行的函数
+                            console.log(data); //通过远程接口接收json并且打印在浏览器控制台
+
+                        },
+                        error: function(err) {
+                            alert("提交失败");
+                        }
+                    });
                 }
             }
-            $.ajax({
-                type: "post",
-                url: "http://localhost:8081/bmc/index",
-                data: {
-                    "id": setData.id,
-                    "fileName": setData.filename
-                },
-                dataType: "json",
-                success: function(data) { //请求响应成功执行的函数
-                    window.location.href = "https://www.baidu.com";
-                },
-                error: function(err) {
-                    alert("提交失败");
-                }
-            });
         }
     }
 </script>
@@ -76,8 +77,8 @@
 <select id="goods_type">
 
 </select>
-<input type="file" id="file"><br>
-<input id="btn" type="button" onclick="tijiao()" value="提交">
+<input type="file" name="fileName" id="file"><br>
+<input id="btn" type="submit" value="提交" onclick="upload()">
 </body>
 
 </html>
