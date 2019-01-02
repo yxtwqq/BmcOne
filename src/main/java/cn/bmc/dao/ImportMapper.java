@@ -8,7 +8,5 @@ import org.apache.ibatis.annotations.Mapper;
 public interface ImportMapper {
     void addData(UploadData uploadData);
 
-    int updateDataById(UploadData uploadData);
-
-    int selectByID(Long id);
+    int selectByID(Integer uploadid);
 }

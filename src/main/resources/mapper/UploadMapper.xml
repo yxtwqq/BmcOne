@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.bmc.dao.UploadMapper"><!--上传文件映射xml-->
+    <select id="getUploadListById" resultType="cn.bmc.entity.Upload"><!--根据店铺id查找店铺上传文件列表-->
+        select * from file_upload
+        where shopid = #{shopid}
+        order by uptime DESC    <!--根据上传时间倒序排列-->
+    </select>
+
+    <insert id="addUplod" parameterType="cn.bmc.entity.Upload"><!--插入上传记录映射文件-->
+         insert into file_upload (uploader,filename,estatus,shopid,filepath,uptime,stime,etime)
+         values (#{uploader},#{filename},#{estatus},#{shopid},#{filepath},#{uptime},#{stime},#{etime})
+    </insert>
+    <select id="getUploadList" resultType="cn.bmc.entity.Upload"><!--根据店铺id查找店铺上传文件列表-->
+        select * from file_upload
+        order by id DESC    <!--根据上传时间倒序排列-->
+    </select>
+</mapper>

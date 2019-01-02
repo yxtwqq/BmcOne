@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+        body {
+            text-align: center;
+        }
+
+        h3 {
+            color: black;
+        }
+
+    </style>
+</head>
+<body onload="run()">
+<h3>上传成功！</h3>
+<span id="count">5</span>秒后，跳转到对比结果<a href="/upload">页面</a>...
+<script type="text/javascript">
+
+    var count = 5
+
+    function run() {
+        document.getElementById("count").innerHTML = count
+        setTimeout("run()", 1000)
+        count--;
+        if (count == 0) {
+            //window.location.href = "http://localhost:8080/upload";
+        }
+    }
+</script>
+</body>
+</html>

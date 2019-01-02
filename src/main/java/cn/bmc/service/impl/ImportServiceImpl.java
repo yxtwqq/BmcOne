@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,8 +37,9 @@ public class ImportServiceImpl implements ImportService {
 
     @Transactional(readOnly = false, rollbackFor = Exception.class)
     @Override
-    public Boolean batchImport(Integer shopid, String fileName, String file) throws Exception {
+    public Integer batchImport(Integer uploadid, String fileName, String file) throws Exception {
 
+        Integer num = 0;
         Boolean notNull = false;
         List<UploadData> dataList = new ArrayList<UploadData>();
         if (!fileName.matches("^.+\\.(?i)(xls)$") && !fileName.matches("^.+\\.(?i)(xlsx)$")) {
@@ -67,15 +69,17 @@ public class ImportServiceImpl implements ImportService {
 
             uploadData = new UploadData();
 
-            Long gid =new Double(row.getCell(0).getNumericCellValue()).longValue();
+            Long gid = new Double(row.getCell(0).getNumericCellValue()).longValue();
 
-            if (gid == null) {
-                throw new MyException("导入失败(第" + (r + 1) + "行,姓名未填写)");
+            if (gid == null || gid == 0) {
+                throw new MyException("导入失败(第" + (r + 1) + "行,商品id未填写)");
             }
 
-            Double price = row.getCell(1).getNumericCellValue();
-            if (price == null) {
-                throw new MyException("导入失败(第" + (r + 1) + "行,电话未填写)");
+            Double price1 = row.getCell(1).getNumericCellValue();
+            DecimalFormat df = new DecimalFormat("#.##");
+            String price = df.format(price1);
+            if (price == null || price == "") {
+                throw new MyException("导入失败(第" + (r + 1) + "行,价格未填写)");
             }
 
 
@@ -87,24 +91,22 @@ public class ImportServiceImpl implements ImportService {
             Date date = new Date();
 
 
-            uploadData.setgId(gid);
-            uploadData.setgPrice(price);
-            uploadData.setsId(shopid);
-            uploadData.setUpTime(date);
+            uploadData.setGoodsid(gid);
+            uploadData.setPrice(price);
+            uploadData.setUploadid(uploadid);
             //System.out.println("gid:" + gid + ",price:" + price + ",sid:" + shopid + ",date:" + date);
             dataList.add(uploadData);
         }
         for (UploadData data : dataList) {
-            Long id = data.getgId();
-            int cnt = importMapper.selectByID(id);
-            if (cnt == 0) {
-                importMapper.addData(data);
-                LOGGER.info(" 插入 " + data);
-            } else {
-                importMapper.updateDataById(data);
-                LOGGER.info(" 更新 " + data);
-            }
+            num++;
+            importMapper.addData(data);
+            LOGGER.info(" 插入 " + data);
         }
-        return notNull;
+        return num;
+    }
+
+    @Override
+    public int selectByID(Integer uploadid) {
+        return importMapper.selectByID(uploadid);
     }
 }

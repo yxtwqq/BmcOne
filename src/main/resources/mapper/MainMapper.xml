@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.bmc.dao.MainMapper">
+    <resultMap id="fileuoload" type="cn.bmc.entity.Upload">
+        <id column="id" property="id"></id>
+        <result column="uploader" property="uploader"></result>
+        <result column="filename" property="filename"></result>
+        <result column="estatus" property="estatus"></result>
+        <result column="shopid" property="shopid"></result>
+        <result column="filepath" property="filepath"></result>
+        <result column="uptime" property="uptime"></result>
+        <result column="stime" property="stime"></result>
+        <result column="etime" property="etime"></result>
+    </resultMap>
+
+    <!--上传记录sql-->
+    <select id="getUploadList" resultMap="fileuoload">
+        SELECT * FROM file_upload
+        where shopid = #{shopid} and estatus = #{estatus}
+        order by uptime DESC
+    </select>
+    <!--条件查询sql-->
+    <select id="getSearch" resultType="cn.bmc.entity.Upload">
+        SELECT * FROM file_upload
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="shopid != null and shopid != ''">
+                AND shopid = #{shopid}
+            </if>
+            <if test="estatus != null and estatus != ''">
+                AND file_upload.estatus = #{estatus}
+            </if>
+            <if test="uploader != '' and uploader != null">
+                AND file_upload.uploader LIKE CONCAT('%',#{uploader},'%')
+            </if>
+            <if test="filename != '' and filename != null">
+                AND file_upload.filename LIKE CONCAT('%',#{filename},'%')
+            </if>
+            <if test="starttime != null and starttime != ''">
+                AND file_upload.uptime >= CONCAT(#{starttime},' 00:00:00')
+            </if>
+            <if test="endtime != null and endtime != ''">
+                AND file_upload.uptime &lt;= CONCAT(#{endtime},' 23:59:59')
+            </if>
+        </trim>
+        order by file_upload.uptime DESC
+    </select>
+
+    <update id="upEstatus" parameterType="cn.bmc.entity.Upload">
+        update file_upload SET estatus=#{estatus}
+        where id=#{uploadid}
+    </update>
+</mapper>

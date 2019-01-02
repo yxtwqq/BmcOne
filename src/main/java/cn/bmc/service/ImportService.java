@@ -1,5 +1,6 @@
 package cn.bmc.service;
 
 public interface ImportService {
-    Boolean batchImport(Integer shopid, String fileName, String file) throws Exception;
+    Integer batchImport(Integer uploadid, String fileName, String file) throws Exception;
+    int selectByID(Integer uploadid);
 }

@@ -3,61 +3,50 @@ package cn.bmc.entity;
 import java.util.Date;
 
 public class UploadData {
-    private Long gId;//商品id
-    private Double gPrice;//商品价格
-    private Integer sId;//店铺id
-    private Date upTime;//导入时间
+    private Integer id;//商品id
+    private Long goodsid;//商品价格
+    private String price;//店铺id
+    private Integer uploadid;//导入时间
 
     @Override
     public String toString() {
         return "UploadData{" +
-                "gId=" + gId +
-                ", gPrice=" + gPrice +
-                ", sId=" + sId +
-                ", upTime=" + upTime +
+                "id=" + id +
+                ", goodsid='" + goodsid + '\'' +
+                ", price='" + price + '\'' +
+                ", uploadid=" + uploadid +
                 '}';
     }
 
-    public UploadData() {
-        super();
+    public String getPrice() {
+        return price;
     }
 
-    public UploadData(Long gId, Double gPrice, Integer sId, Date upTime) {
-        this.gId = gId;
-        this.gPrice = gPrice;
-        this.sId = sId;
-        this.upTime = upTime;
+    public void setPrice(String price) {
+        this.price = price;
     }
 
-    public Long getgId() {
-        return gId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setgId(Long gId) {
-        this.gId = gId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public Double getgPrice() {
-        return gPrice;
+    public Long getGoodsid() {
+        return goodsid;
     }
 
-    public void setgPrice(Double gPrice) {
-        this.gPrice = gPrice;
+    public void setGoodsid(Long goodsid) {
+        this.goodsid = goodsid;
     }
 
-    public Integer getsId() {
-        return sId;
+    public Integer getUploadid() {
+        return uploadid;
     }
 
-    public void setsId(Integer sId) {
-        this.sId = sId;
-    }
-
-    public Date getUpTime() {
-        return upTime;
-    }
-
-    public void setUpTime(Date upTime) {
-        this.upTime = upTime;
+    public void setUploadid(Integer uploadid) {
+        this.uploadid = uploadid;
     }
 }

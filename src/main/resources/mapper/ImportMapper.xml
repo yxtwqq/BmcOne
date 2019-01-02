@@ -6,30 +6,20 @@
 <mapper namespace="cn.bmc.dao.ImportMapper">
 
     <insert id="addData" parameterType="cn.bmc.entity.UploadData">
-        insert into bmc_goods
-        (g_id,g_price,s_id,uptime)
+        insert into goods_list
+        (goodsid,price,uploadid)
         values
         (
-        #{gId},
-        #{gPrice},
-        #{sId},
-        #{upTime}
+        #{goodsid},
+        #{price},
+        #{uploadid}
         )
     </insert>
-    <update id="updateDataById" parameterType="cn.bmc.entity.UploadData">
-        update bmc_goods
-        set
-        g_id=#{gId},
-        g_price=#{gPrice},
-        s_id=#{sId},
-        uptime=#{upTime}
-        where g_id = #{gId}
-    </update>
 
     <select id="selectByID" resultType="java.lang.Integer">
         SELECT
         count(*)
-        FROM bmc_goods
-        WHERE g_id=#{gId}
+        FROM goods_list
+        WHERE uploadid=#{uploadid}
     </select>
 </mapper>
